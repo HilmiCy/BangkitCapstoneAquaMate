@@ -1,15 +1,28 @@
 package com.example.aquamatesocialfish
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.example.aquamatesocialfish.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (FirebaseAuth.getInstance().currentUser == null)
+                startActivity(Intent(this, RegisterActivity::class.java))
+            else{
+                startActivity(Intent(this, LoginActivity::class.java))
+            }
+            finish()
+        }, 3000)
     }
 }

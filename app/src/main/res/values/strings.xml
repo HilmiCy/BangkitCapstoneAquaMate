@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">AquamateSocialFish</string>
+    <string name="email">email</string>
+    <string name="password">password</string>
+    <string name="masuk_kedalam_akun">Masuk Kedalam Akun</string>
+    <string name="register">Register</string>
+    <string name="sudah_punya_akun_login">Sudah Punya Akun? Login</string>
+    <string name="nama">nama</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="username">Username</string>
+    <string name="full_name">Full Name</string>
+    <string name="pengikut">Pengikut</string>
+    <string name="diikuti">Diikuti</string>
+    <string name="follow">Follow</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="diagnosa_digital_solusi_real">Diagnosa Digital, Solusi Real</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

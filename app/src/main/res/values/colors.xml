@@ -5,4 +5,5 @@
     <color name="blue_tint">#0096B4</color>
     <color name="pastel_blue">#CDF5FD</color>
     <color name="grey">#9E9E9E</color>
+    <color name="blue_light">#F4F6FC</color>
 </resources>

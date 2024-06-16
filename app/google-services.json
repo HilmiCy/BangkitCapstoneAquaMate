@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "376435314327",
+    "project_id": "aquamatesocialfish",
+    "storage_bucket": "aquamatesocialfish.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:376435314327:android:d43adec9d5bde4df5663d2",
+        "android_client_info": {
+          "package_name": "com.example.aquamatesocialfish"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-SOQJvHwgW27yvq9IoAd9r40_zeIPMtY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
