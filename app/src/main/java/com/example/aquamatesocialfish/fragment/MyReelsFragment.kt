@@ -1,33 +1,31 @@
 package com.example.aquamatesocialfish.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.aquamatesocialfish.R
+import com.example.aquamatesocialfish.adapter.MyPostViewAdapter
+import com.example.aquamatesocialfish.adapter.UserReelAdapter
+import com.example.aquamatesocialfish.databinding.FragmentMyReelsBinding
+import com.example.aquamatesocialfish.models.PostUserModel
+import com.example.aquamatesocialfish.models.ReelsUserModel
+import com.example.aquamatesocialfish.utils.VIDIO_REEL
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.toObject
+import com.google.firebase.ktx.Firebase
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MyReelsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MyReelsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var myReelsBinding: FragmentMyReelsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
 
     override fun onCreateView(
@@ -35,26 +33,44 @@ class MyReelsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_reels, container, false)
+        myReelsBinding = FragmentMyReelsBinding.inflate(inflater, container, false)
+
+        val contentReelList = ArrayList<ReelsUserModel>()
+        val adapter = UserReelAdapter(requireContext(),contentReelList )
+
+        // Setup RecyclerView
+        myReelsBinding.rvMyReels.layoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
+        myReelsBinding.rvMyReels.adapter = adapter
+
+        // Fetch data from Firestore
+        val userId = Firebase.auth.currentUser?.uid
+        if (userId != null) {
+            Firebase.firestore.collection(userId + VIDIO_REEL).get()
+                .addOnSuccessListener { snapshot ->
+                    val tempList = ArrayList<ReelsUserModel>()
+                    for (document in snapshot.documents) {
+                        val reelUser : ReelsUserModel = document.toObject<ReelsUserModel>()!!
+                        if (reelUser != null) {
+                            tempList.add(reelUser)
+                        } else {
+                            Log.e("MyPostFragment", "Failed to convert document to PostUserModel")
+                        }
+                    }
+                    contentReelList.addAll(tempList)
+                    adapter.notifyDataSetChanged()
+                    Log.d("MyPostFragment", "Data successfully loaded: ${contentReelList.size} items")
+                }
+                .addOnFailureListener { e ->
+                    Log.e("MyPostFragment", "Error fetching data", e)
+                }
+        } else {
+            Log.e("MyPostFragment", "User ID is null")
+        }
+
+        return myReelsBinding.root
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MyReelsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MyReelsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+
     }
 }

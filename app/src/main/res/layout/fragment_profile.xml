@@ -6,10 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".fragment.ProfileFragment">
 
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -193,7 +189,10 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tablayout_View"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:tabRippleColor="#CDF5FD"
+            app:tabSelectedTextColor="#0095B3"
+            app:tabTextColor="#B3B3B3">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
@@ -228,6 +227,5 @@
             app:layout_constraintTop_toTopOf="@+id/viewPager_View" />
 
     </LinearLayout>
-</ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

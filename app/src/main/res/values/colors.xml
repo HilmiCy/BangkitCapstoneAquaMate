@@ -6,4 +6,5 @@
     <color name="pastel_blue">#CDF5FD</color>
     <color name="grey">#9E9E9E</color>
     <color name="blue_light">#F4F6FC</color>
+    <color name="transparent">#00000000</color>
 </resources>

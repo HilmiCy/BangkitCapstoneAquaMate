@@ -1,60 +1,105 @@
 package com.example.aquamatesocialfish.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.aquamatesocialfish.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.aquamatesocialfish.adapter.SearchUserAdapter
+import com.example.aquamatesocialfish.databinding.FragmentSearchBinding
+import com.example.aquamatesocialfish.models.UserModel
+import com.example.aquamatesocialfish.utils.USER_COLLECTION
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.toObject
+import com.google.firebase.ktx.Firebase
+import androidx.appcompat.widget.SearchView
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SearchFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SearchFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var searchBinding: FragmentSearchBinding
+    private lateinit var searchAdapter: SearchUserAdapter
+    private var searchList = ArrayList<UserModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false)
+        searchBinding = FragmentSearchBinding.inflate(inflater, container, false)
+        searchBinding.rvSearchUser.layoutManager = LinearLayoutManager(requireContext())
+        searchAdapter = SearchUserAdapter(requireContext(), searchList)
+        searchBinding.rvSearchUser.adapter = searchAdapter
+
+        // Load initial user data
+        loadAllUsers()
+
+        // Set listener for search
+        searchBinding.searchViewUsername.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    searchUsersByName(it)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    if (it.isEmpty()) {
+                        loadAllUsers()
+                    } else {
+                        searchUsersByName(it)
+                    }
+                }
+                return true
+            }
+        })
+
+        return searchBinding.root
+    }
+
+    private fun loadAllUsers() {
+        Firebase.firestore.collection(USER_COLLECTION)
+            .limit(5)  // Batasi jumlah data yang diambil menjadi 5
+            .get()
+            .addOnSuccessListener { result ->
+                searchList.clear()
+                for (document in result.documents) {
+                    val user = document.toObject<UserModel>()
+                    if (user != null && document.id != Firebase.auth.currentUser?.uid) {
+                        searchList.add(user)
+                    }
+                }
+                searchAdapter.notifyDataSetChanged()
+            }
+            .addOnFailureListener { exception ->
+                Log.e("SearchFragment", "Error getting users: ", exception)
+            }
+    }
+
+    private fun searchUsersByName(name: String) {
+        Firebase.firestore.collection(USER_COLLECTION)
+            .whereGreaterThanOrEqualTo("name", name)
+            .whereLessThanOrEqualTo("name", name + '\uf8ff')
+            .limit(7)
+            .get()
+            .addOnSuccessListener { result ->
+                searchList.clear()
+                for (document in result.documents) {
+                    val user = document.toObject<UserModel>()
+                    if (user != null && document.id != Firebase.auth.currentUser?.uid) {
+                        searchList.add(user)
+                    }
+                }
+                searchAdapter.notifyDataSetChanged()
+            }
+            .addOnFailureListener { exception ->
+                Log.e("SearchFragment", "Error searching users: ", exception)
+            }
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SearchFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+
     }
 }

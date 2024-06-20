@@ -27,11 +27,12 @@ class CreatePostFragment : BottomSheetDialogFragment() {
         // Inflate the layout for this fragment
         binding = FragmentCreatePostBinding.inflate(inflater,container,false)
 
-        binding.ivAddPost.setOnClickListener {
+        binding.tvAddPost.setOnClickListener {
             activity?.startActivity(Intent(requireContext(),PostActivity::class.java))
+            activity?.finish()
         }
 
-        binding.ivAddReels.setOnClickListener {
+        binding.tvAddReels.setOnClickListener {
             activity?.startActivity(Intent(requireContext(),AllRealsActivity::class.java))
         }
 

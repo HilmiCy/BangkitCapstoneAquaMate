@@ -18,7 +18,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
     }
+
 
     buildTypes {
         release {
@@ -71,8 +73,10 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
 
 
+    implementation(libs.timeago)
     implementation ("com.squareup.picasso:picasso:2.8")
     implementation ("de.hdodenhof:circleimageview:3.1.0")
+    implementation ("com.makeramen:roundedimageview:2.3.0")
 
     // Import the BoM for the Firebase platform
     implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
@@ -89,6 +93,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
+    implementation(libs.androidx.legacy.support.v4)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

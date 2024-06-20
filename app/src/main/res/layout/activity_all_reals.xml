@@ -1,10 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/pastel_blue"
     tools:context=".view.AllRealsActivity">
+
+    <!-- Toolbar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/materialToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue_tint"
+        app:titleTextColor="@color/white"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Unggah Vidio Reels" />
+
+    <!-- Kontainer untuk konten post dengan background putih -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/contentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@color/white"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/materialToolbar"
+        app:layout_constraintVertical_bias="0.0">
+
+        <!-- Gambar Profil -->
+        <ImageView
+            android:id="@+id/imageProfile"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="Profil Picture"
+            android:src="@drawable/user_avatar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- EditText untuk Teks Post -->
+        <EditText
+            android:id="@+id/etCaption"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@null"
+            android:gravity="top"
+            android:hint="Apa yang sedang terjadi?"
+            android:inputType="textMultiLine"
+            android:minHeight="100dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imageProfile"
+            app:layout_constraintTop_toTopOf="@id/imageProfile" />
+
+        <!-- ImageButton untuk Menambahkan Gambar -->
+        <ImageView
+            android:id="@+id/btnAddReels"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
+            android:background="?attr/selectableItemBackground"
+            android:contentDescription="Tambahkan Gambar"
+            android:src="@drawable/reels_black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etCaption" />
+
+        <!-- Button untuk Mengirim Post -->
+        <Button
+            android:id="@+id/btnPost"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/blue_tint"
+            android:text="Post"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etCaption" />
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="112dp"
+            android:backgroundTint="@color/blue_tint"
+            android:text="Hapus"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etCaption" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/contentContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
