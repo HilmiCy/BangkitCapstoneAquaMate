@@ -37,12 +37,11 @@
         app:layout_constraintTop_toBottomOf="@id/materialToolbar"
         app:layout_constraintVertical_bias="0.0">
 
-        <!-- Gambar Profil -->
         <ImageView
             android:id="@+id/imageProfile"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:contentDescription="Profil Picture"
+            android:contentDescription="@string/profil_picture"
             android:src="@drawable/user_avatar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -57,7 +56,7 @@
             android:layout_marginEnd="16dp"
             android:background="@null"
             android:gravity="top"
-            android:hint="Apa yang sedang terjadi?"
+            android:hint="@string/apa_yang_sedang_terjadi"
             android:inputType="textMultiLine"
             android:minHeight="100dp"
             android:textColor="@color/black"
@@ -66,7 +65,7 @@
             app:layout_constraintStart_toEndOf="@id/imageProfile"
             app:layout_constraintTop_toTopOf="@id/imageProfile" />
 
-        <!-- ImageButton untuk Menambahkan Gambar -->
+
         <ImageView
             android:id="@+id/btnAddReels"
             android:layout_width="40dp"
@@ -74,19 +73,18 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="12dp"
             android:background="?attr/selectableItemBackground"
-            android:contentDescription="Tambahkan Gambar"
+            android:contentDescription="@string/tambahkan_gambar"
             android:src="@drawable/reels_black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etCaption" />
 
-        <!-- Button untuk Mengirim Post -->
         <Button
             android:id="@+id/btnPost"
             android:layout_width="100dp"
             android:layout_height="40dp"
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/blue_tint"
-            android:text="Post"
+            android:text="@string/post"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etCaption" />
@@ -98,7 +96,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="112dp"
             android:backgroundTint="@color/blue_tint"
-            android:text="Hapus"
+            android:text="@string/batal"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etCaption" />

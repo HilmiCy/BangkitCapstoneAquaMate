@@ -3,8 +3,6 @@ package com.example.aquamatesocialfish.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
-import androidx.viewpager2.adapter.FragmentViewHolder
 
 class ViewPagerAdapter(managerFragment: FragmentManager)
     : FragmentPagerAdapter(managerFragment, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {

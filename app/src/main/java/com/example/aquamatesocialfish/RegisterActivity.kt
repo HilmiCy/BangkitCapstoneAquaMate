@@ -20,7 +20,6 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var user: UserModel
 
-    // ActivityResultLauncher for picking image
     private val launcher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
             showProgressBar(true)
@@ -30,7 +29,6 @@ class RegisterActivity : AppCompatActivity() {
                     Toast.makeText(this, "Failed to upload image", Toast.LENGTH_SHORT).show()
                 } else {
                     user.image = imageUrl
-                    // Display the selected image in ImageView (optional)
                     binding.ivAddimage.setImageURI(uri)
                 }
             }
@@ -45,7 +43,6 @@ class RegisterActivity : AppCompatActivity() {
         user = UserModel()
 
         binding.btnChooseImage.setOnClickListener {
-            // Launch image picker
             launcher.launch("image/*")
         }
 
@@ -73,7 +70,6 @@ class RegisterActivity : AppCompatActivity() {
                                 user.fullname = fullname
                                 user.bio = bio
 
-                                // Store user data in Firestore
                                 Firebase.firestore.collection(USER_COLLECTION)
                                     .document(currentUser.uid)
                                     .set(user)
@@ -96,7 +92,6 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         binding.tvLogin.setOnClickListener {
-            // Navigate to login screen
             navigateToLogin()
         }
     }

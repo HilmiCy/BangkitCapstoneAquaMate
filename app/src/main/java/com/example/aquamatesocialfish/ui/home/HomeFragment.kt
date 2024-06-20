@@ -1,19 +1,17 @@
 package com.example.aquamatesocialfish.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.aquamatesocialfish.R
 import com.example.aquamatesocialfish.adapter.AllPostAdapter
-import com.example.aquamatesocialfish.adapter.FollowStoryAdapter
 import com.example.aquamatesocialfish.databinding.FragmentHomeBinding
 import com.example.aquamatesocialfish.models.PostUserModel
 import com.example.aquamatesocialfish.models.UserModel
@@ -30,10 +28,6 @@ class HomeFragment : Fragment() {
     private var allPostList = ArrayList<PostUserModel>()
     private lateinit var postAdapter: AllPostAdapter
     private var followStoryList = ArrayList<UserModel>()
-    private lateinit var followStoryAdapter: FollowStoryAdapter
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,45 +35,65 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         homebinding = FragmentHomeBinding.inflate(inflater, container, false)
-        postAdapter = AllPostAdapter(requireContext(),allPostList)
+        val swipeRefreshLayout = homebinding.swipeRefreshLayout
+
+        postAdapter = AllPostAdapter(requireContext(), allPostList)
         homebinding.rvHome.layoutManager = LinearLayoutManager(requireContext())
         homebinding.rvHome.adapter = postAdapter
-
-        followStoryAdapter = FollowStoryAdapter(requireContext(),followStoryList)
-        homebinding.FollowStoryRv.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager
-                .HORIZONTAL, false)
-        homebinding.FollowStoryRv.adapter = followStoryAdapter
 
         setHasOptionsMenu(true)
         (requireActivity() as AppCompatActivity).setSupportActionBar(homebinding.materialToolbarHome)
 
-        Firebase.firestore.collection(Firebase.auth.currentUser!!.uid + FOLLOW_USER).get().addOnSuccessListener {
-           var storyTempList = ArrayList<UserModel>()
-            followStoryList.clear()
-            for(i in it.documents){
-                var storyUser : UserModel = i.toObject<UserModel>()!!
-                storyTempList.add(storyUser)
-            }
-            followStoryList.addAll(storyTempList)
-            followStoryAdapter.notifyDataSetChanged()
+        fetchFollowStories()
+
+        fetchAllPosts()
+
+        swipeRefreshLayout.setOnRefreshListener {
+            fetchAllPosts()
+            fetchFollowStories()
+            swipeRefreshLayout.isRefreshing = false  // Hide refreshing animation
         }
 
-        Firebase.firestore.collection(POST).get().addOnSuccessListener {
-            var postTempList = ArrayList<PostUserModel>()
-            allPostList.clear()
-            for(i in it.documents){
-                var allPost: PostUserModel = i.toObject<PostUserModel>()!!
-                postTempList.add(allPost)
-            }
-            allPostList.addAll(postTempList)
-            postAdapter.notifyDataSetChanged()
-        }
         return homebinding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.option_menu_home, menu)
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    private fun fetchFollowStories() {
+        Firebase.firestore.collection(Firebase.auth.currentUser!!.uid + FOLLOW_USER).get()
+            .addOnSuccessListener { querySnapshot ->
+                val storyTempList = ArrayList<UserModel>()
+                followStoryList.clear()
+                for (document in querySnapshot.documents) {
+                    val storyUser = document.toObject<UserModel>()
+                    Log.d("HomeFragment", "Fetched story user: ${storyUser.toString()}")
+                    storyUser?.let { storyTempList.add(it) }
+                }
+                followStoryList.addAll(storyTempList)
+            }
+            .addOnFailureListener { exception ->
+                Log.e("HomeFragment", "Error fetching follow stories", exception)
+            }
+    }
+
+    private fun fetchAllPosts() {
+        Firebase.firestore.collection(POST).get()
+            .addOnSuccessListener { querySnapshot ->
+                val postTempList = ArrayList<PostUserModel>()
+                allPostList.clear()
+                for (document in querySnapshot.documents) {
+                    val post = document.toObject<PostUserModel>()
+                    Log.d("HomeFragment", "Fetched post: ${post.toString()}")
+                    post?.let { postTempList.add(it) }
+                }
+                allPostList.addAll(postTempList)
+                postAdapter.notifyDataSetChanged()
+            }
+            .addOnFailureListener { exception ->
+                Log.e("HomeFragment", "Error fetching posts", exception)
+            }
     }
 }

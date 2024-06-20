@@ -10,17 +10,15 @@ import com.example.aquamatesocialfish.databinding.ItemViewReelsBinding
 import com.example.aquamatesocialfish.models.ReelsUserModel
 import com.squareup.picasso.Picasso
 
-class AllReelViewAdapter (context : Context, var allReelList : ArrayList<ReelsUserModel>) : RecyclerView.Adapter<AllReelViewAdapter.ViewHolder>() {
+class AllReelViewAdapter(private val context: Context, private val allReelList: ArrayList<ReelsUserModel>) :
+    RecyclerView.Adapter<AllReelViewAdapter.ViewHolder>() {
 
-    inner class ViewHolder (var allreelbinding: ItemViewReelsBinding):
-        RecyclerView.ViewHolder(allreelbinding.root) {
-
-    }
+    inner class ViewHolder(val binding: ItemViewReelsBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        var allreelbinding = ItemViewReelsBinding.inflate(LayoutInflater
-            .from(parent.context), parent, false)
-        return ViewHolder(allreelbinding)
+        val binding = ItemViewReelsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
@@ -28,12 +26,18 @@ class AllReelViewAdapter (context : Context, var allReelList : ArrayList<ReelsUs
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Picasso.get().load(allReelList.get(position).profileImageReel).placeholder(R.drawable.user_avatar).into(holder.allreelbinding.ivProfile)
-        holder.allreelbinding.tvCaptionTemplate.setText(allReelList.get(position).contentCaption)
-        holder.allreelbinding.vvReels.setVideoPath(allReelList.get(position).videoReelsUrl)
-        holder.allreelbinding.vvReels.setOnPreparedListener {
-            holder.allreelbinding.progressBar.visibility = View.GONE
-            holder.allreelbinding.vvReels.start()
+        val reel = allReelList[position]
+
+        Picasso.get().load(reel.profileImageReel).
+        placeholder(R.drawable.user_avatar)
+            .into(holder.binding.ivProfile)
+
+        holder.binding.tvCaptionTemplate.text = reel.contentCaption
+
+        holder.binding.vvReels.setVideoPath(reel.videoReelsUrl)
+        holder.binding.vvReels.setOnPreparedListener {
+            holder.binding.progressBar.visibility = View.GONE
+            holder.binding.vvReels.start()
         }
     }
 }

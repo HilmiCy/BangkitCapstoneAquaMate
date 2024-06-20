@@ -28,6 +28,8 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:src="@tools:sample/avatars" />
 
+
+
     <TextView
         android:id="@+id/tv_caption_template"
         android:layout_width="0dp"

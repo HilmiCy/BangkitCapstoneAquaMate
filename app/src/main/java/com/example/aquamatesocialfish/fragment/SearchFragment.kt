@@ -61,7 +61,7 @@ class SearchFragment : Fragment() {
 
     private fun loadAllUsers() {
         Firebase.firestore.collection(USER_COLLECTION)
-            .limit(5)  // Batasi jumlah data yang diambil menjadi 5
+            .limit(7)
             .get()
             .addOnSuccessListener { result ->
                 searchList.clear()

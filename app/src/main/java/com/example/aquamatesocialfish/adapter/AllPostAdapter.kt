@@ -2,6 +2,7 @@ package com.example.aquamatesocialfish.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -16,12 +17,12 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
 
-class AllPostAdapter(var context: Context, var allPostlist: ArrayList<PostUserModel>): RecyclerView.Adapter<AllPostAdapter.MyHolder>(){
+class AllPostAdapter(var context: Context, var allPostlist: ArrayList<PostUserModel>) : RecyclerView.Adapter<AllPostAdapter.MyHolder>() {
 
-    inner class  MyHolder(var binding : ItemViewHomeBinding):RecyclerView.ViewHolder(binding.root)
+    inner class MyHolder(var binding: ItemViewHomeBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
-        var binding = ItemViewHomeBinding.inflate(LayoutInflater.from(context),parent,false)
+        val binding = ItemViewHomeBinding.inflate(LayoutInflater.from(context), parent, false)
         return MyHolder(binding)
     }
 
@@ -30,37 +31,52 @@ class AllPostAdapter(var context: Context, var allPostlist: ArrayList<PostUserMo
     }
 
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
-        try {
-            Firebase.firestore.collection(USER_COLLECTION)
-                .document(allPostlist.get(position).uid).get()
-                .addOnSuccessListener {
-                    var user = it.toObject<UserModel>()
-                    Glide.with(context).load(user!!.image).placeholder(R.drawable.user_avatar)
+        val post = allPostlist[position]
+
+        if (post.uid.isNullOrEmpty()) {
+            Log.e("AllPostAdapter", "Invalid UID: ${post.uid}")
+            return
+        }
+
+        Firebase.firestore.collection(USER_COLLECTION)
+            .document(post.uid).get()
+            .addOnSuccessListener { documentSnapshot ->
+                val user = documentSnapshot.toObject<UserModel>()
+                if (user != null) {
+                    Glide.with(context)
+                        .load(user.image)
+                        .placeholder(R.drawable.user_avatar)
                         .into(holder.binding.profileImage)
                     holder.binding.userName.text = user.name
+                } else {
+                    Log.e("AllPostAdapter", "User data is null for uid: ${post.uid}")
                 }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("AllPostAdapter", "Failed to get user data", exception)
+            }
 
-        }catch (e:Exception){
-
-        }
-        Glide.with(context).load(allPostlist!!.get(position).contentUrl).placeholder(R.drawable.user_avatar)
+        Glide.with(context)
+            .load(post.contentUrl)
+            .placeholder(R.drawable.user_avatar)
             .into(holder.binding.ivPost)
+
+        holder.binding.etPostText.text = post.contentCaption
+
         try {
-            val timeAgo = TimeAgo.using(allPostlist.get(position).time.toLong())
+            val timeAgo = TimeAgo.using(post.time.toLong())
             holder.binding.etPostTime.text = timeAgo
-        } catch (e: Exception){
+        } catch (e: Exception) {
+            Log.e("AllPostAdapter", "Failed to parse time", e)
             holder.binding.etPostTime.text = ""
         }
 
         holder.binding.btnShare.setOnClickListener {
-            var share = Intent(Intent.ACTION_SEND)
-            share.type = "text/plain"
-            share.putExtra(Intent.EXTRA_TEXT,allPostlist.get(position).contentUrl)
-            context.startActivity(share)
-        }
-        holder.binding.etPostText.text = allPostlist.get(position).contentCaption
-        holder.binding.btnLike.setOnClickListener {
-            holder.binding.btnLike.setImageResource(R.drawable.like_user)
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, post.contentUrl)
+            }
+            context.startActivity(Intent.createChooser(shareIntent, "Share via"))
         }
     }
 }

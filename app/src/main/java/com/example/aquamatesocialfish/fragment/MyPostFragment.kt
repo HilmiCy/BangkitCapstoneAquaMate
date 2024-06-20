@@ -28,12 +28,11 @@ class MyPostFragment : Fragment() {
         val contentList = ArrayList<PostUserModel>()
         val adapter = MyPostViewAdapter(requireContext(), contentList)
 
-        // Setup RecyclerView
         myPostBinding.rvMypost.layoutManager =
             StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
         myPostBinding.rvMypost.adapter = adapter
 
-        // Fetch data from Firestore
+
         val userId = Firebase.auth.currentUser?.uid
         if (userId != null) {
             Firebase.firestore.collection(userId).get()

@@ -83,11 +83,11 @@ class AllRealsActivity : AppCompatActivity() {
                         }
                     }
                 }
-                bindingReels.progressBar.visibility = View.GONE // Sembunyikan progress bar
+                bindingReels.progressBar.visibility = View.GONE
             }
             .addOnFailureListener { exception ->
                 exception.printStackTrace()
-                bindingReels.progressBar.visibility = View.GONE // Sembunyikan progress bar
+                bindingReels.progressBar.visibility = View.GONE
                 Toast.makeText(this, "Failed to load profile", Toast.LENGTH_SHORT).show()
             }
     }

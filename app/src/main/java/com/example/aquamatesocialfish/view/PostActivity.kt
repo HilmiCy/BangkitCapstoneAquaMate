@@ -22,18 +22,15 @@ import com.squareup.picasso.Picasso
 
 class PostActivity : AppCompatActivity() {
 
-    // Binding objek untuk menghubungkan layout XML dengan kode
     private lateinit var binding: ActivityPostBinding
 
-    // Variabel untuk menyimpan URL gambar yang akan diunggah
     private var urlImage: String? = null
 
-    // Launcher untuk mendapatkan konten (gambar) dari perangkat
     private val launcher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
-            showProgressBar(true) // Tampilkan progress bar saat upload
+            showProgressBar(true)
             uploadImage(uri, USER_AQUAMATE_FOLDER_POST) { Url ->
-                showProgressBar(false) // Sembunyikan progress bar setelah upload
+                showProgressBar(false)
                 if (Url != null) {
                     binding.IvPreview.setImageURI(uri)
                     urlImage = Url
@@ -60,13 +57,10 @@ class PostActivity : AppCompatActivity() {
             finish()
         }
 
-        // Memuat profil pengguna
         loadUserProfile()
 
-        // Sembunyikan preview image saat awal
         binding.IvPreview.visibility = View.GONE
 
-        // Listener untuk tombol tambah gambar
         binding.btnAddImage.setOnClickListener {
             launcher.launch("image/*")
         }
@@ -99,7 +93,6 @@ class PostActivity : AppCompatActivity() {
         }
     }
 
-    // Fungsi untuk memuat profil pengguna dari Firestore
     private fun loadUserProfile() {
         Firebase.firestore.collection(USER_COLLECTION)
             .document(Firebase.auth.currentUser!!.uid)
@@ -113,19 +106,17 @@ class PostActivity : AppCompatActivity() {
                         }
                     }
                 }
-                binding.progressBar.visibility = View.GONE // Sembunyikan progress bar
+                binding.progressBar.visibility = View.GONE
             }
             .addOnFailureListener { exception ->
                 exception.printStackTrace()
-                binding.progressBar.visibility = View.GONE // Sembunyikan progress bar
+                binding.progressBar.visibility = View.GONE
                 Toast.makeText(this, "Failed to load profile", Toast.LENGTH_SHORT).show()
             }
     }
 
-    // Fungsi untuk menampilkan atau menyembunyikan progress bar
     private fun showProgressBar(show: Boolean) {
         binding.progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
-
 
 }

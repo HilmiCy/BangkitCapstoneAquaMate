@@ -25,6 +25,10 @@ class EditProfileFragment : Fragment() {
     private var savedFullname: String? = null
     private var savedBio: String? = null
 
+    companion object {
+        private const val REQUEST_CODE_SELECT_IMAGE = 101
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,6 +59,16 @@ class EditProfileFragment : Fragment() {
         outState.putString("savedBio", savedBio)
     }
 
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        savedInstanceState?.let {
+            savedFullname = it.getString("savedFullname")
+            savedBio = it.getString("savedBio")
+            binding.etFullname.setText(savedFullname)
+            binding.etbio.setText(savedBio)
+        }
+    }
+
     private fun saveCurrentData() {
         savedFullname = binding.etFullname.text.toString()
         savedBio = binding.etbio.text.toString()
@@ -63,42 +77,41 @@ class EditProfileFragment : Fragment() {
     private fun restoreSavedData(savedInstanceState: Bundle) {
         savedFullname = savedInstanceState.getString("savedFullname")
         savedBio = savedInstanceState.getString("savedBio")
-        binding.etFullname.setText(savedFullname)
-        binding.etbio.setText(savedBio)
     }
 
     private fun loadUserProfile() {
         val userId = Firebase.auth.currentUser?.uid ?: return
 
-        // Show progress bar
         binding.progressBar.visibility = View.VISIBLE
 
-        Firebase.firestore.collection(USER_COLLECTION).document(userId).get().addOnSuccessListener {
-            val user: UserModel? = it.toObject(UserModel::class.java)
-            user?.let {
-                binding.etUsername.setText(it.name)
-                if (savedFullname.isNullOrEmpty()) {
-                    binding.etFullname.setText(it.fullname)
-                } else {
-                    binding.etFullname.setText(savedFullname)
+        Firebase.firestore.collection(USER_COLLECTION).document(userId).get()
+            .addOnSuccessListener { document ->
+                val user = document.toObject(UserModel::class.java)
+                user?.let {
+                    binding.etUsername.setText(it.name)
+                    if (savedFullname.isNullOrEmpty()) {
+                        binding.etFullname.setText(it.fullname)
+                    } else {
+                        binding.etFullname.setText(savedFullname)
+                    }
+                    if (savedBio.isNullOrEmpty()) {
+                        binding.etbio.setText(it.bio)
+                    } else {
+                        binding.etbio.setText(savedBio)
+                    }
+                    if (!it.image.isNullOrEmpty()) {
+                        Picasso.get().load(it.image).into(binding.ivProfile)
+                    }
                 }
-                if (savedBio.isNullOrEmpty()) {
-                    binding.etbio.setText(it.bio)
-                } else {
-                    binding.etbio.setText(savedBio)
-                }
-                if (!it.image.isNullOrEmpty()) {
-                    Picasso.get().load(it.image).into(binding.ivProfile)
-                }
-            }
 
-            // Hide progress bar
-            binding.progressBar.visibility = View.GONE
-        }.addOnFailureListener {
-            // Handle failure
-            binding.progressBar.visibility = View.GONE
-            Toast.makeText(context, "Failed to load user profile", Toast.LENGTH_SHORT).show()
-        }
+                // Hide progress bar
+                binding.progressBar.visibility = View.GONE
+            }
+            .addOnFailureListener { e ->
+                // Handle failure
+                binding.progressBar.visibility = View.GONE
+                Toast.makeText(context, "Failed to load user profile", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun selectImageFromGallery() {
@@ -134,7 +147,6 @@ class EditProfileFragment : Fragment() {
             "bio" to bio
         )
 
-        // Show progress bar
         binding.progressBar.visibility = View.VISIBLE
 
         if (selectedImageUri != null) {
@@ -157,7 +169,7 @@ class EditProfileFragment : Fragment() {
         Firebase.firestore.collection(USER_COLLECTION).document(userId)
             .update(userUpdates)
             .addOnSuccessListener {
-                // Hide progress bar
+
                 binding.progressBar.visibility = View.GONE
                 Toast.makeText(context, "Profile updated successfully", Toast.LENGTH_SHORT).show()
 
@@ -166,7 +178,7 @@ class EditProfileFragment : Fragment() {
                 parentFragmentManager.popBackStack()
             }
             .addOnFailureListener { e ->
-                // Hide progress bar
+
                 binding.progressBar.visibility = View.GONE
                 Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
@@ -175,9 +187,5 @@ class EditProfileFragment : Fragment() {
     private fun refreshProfileFragment() {
         val profileFragment = parentFragmentManager.findFragmentByTag("ProfileFragment") as? ProfileFragment
         profileFragment?.loadUserProfile()
-    }
-
-    companion object {
-        private const val REQUEST_CODE_SELECT_IMAGE = 101
     }
 }

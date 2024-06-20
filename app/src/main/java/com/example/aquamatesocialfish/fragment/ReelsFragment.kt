@@ -15,50 +15,42 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ReelsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ReelsFragment : Fragment() {
 
-    private lateinit var reelsBinding : FragmentReelsBinding
-    var allReellist = ArrayList<ReelsUserModel>()
-    lateinit var reelAdapter : AllReelViewAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    private lateinit var reelsBinding: FragmentReelsBinding
+    private var allReelList = ArrayList<ReelsUserModel>()
+    private lateinit var reelAdapter: AllReelViewAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-       reelsBinding = FragmentReelsBinding.inflate(inflater, container, false)
-        reelAdapter = AllReelViewAdapter(requireContext(),allReellist)
+    ): View {
+        reelsBinding = FragmentReelsBinding.inflate(inflater, container, false)
+
+        reelAdapter = AllReelViewAdapter(requireContext(), allReelList)
         reelsBinding.reelsViewPager.adapter = reelAdapter
-        Firebase.firestore.collection(VIDIO_REEL).get().addOnSuccessListener {
-            var tempReelList  = ArrayList<ReelsUserModel>()
-            allReellist.clear()
-            for (i in it.documents){
-                var allReel = i.toObject<ReelsUserModel>()
-                tempReelList.add(allReel!!)
-            }
-            allReellist.addAll(tempReelList)
-            allReellist.reverse()
-            reelAdapter.notifyDataSetChanged()
-        }
+
+        fetchReelsData()
+
         return reelsBinding.root
     }
 
-    companion object {
+    private fun fetchReelsData() {
+        Firebase.firestore.collection(VIDIO_REEL).get()
+            .addOnSuccessListener { querySnapshot ->
+                val tempReelList = ArrayList<ReelsUserModel>()
+                allReelList.clear()
+                for (document in querySnapshot.documents) {
+                    val reel = document.toObject<ReelsUserModel>()
+                    reel?.let { tempReelList.add(it) }
+                }
 
+                tempReelList.reverse()
+                allReelList.addAll(tempReelList)
+                reelAdapter.notifyDataSetChanged()
+            }
+            .addOnFailureListener { exception ->
+
+            }
     }
 }

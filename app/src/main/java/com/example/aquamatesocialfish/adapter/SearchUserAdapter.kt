@@ -1,5 +1,6 @@
 package com.example.aquamatesocialfish.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -53,6 +54,7 @@ class SearchUserAdapter(var context: Context, var searchList: ArrayList<UserMode
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun checkFollowStatus(currentUserId: String, user: UserModel, holder: ViewHolder) {
         Firebase.firestore.collection("$currentUserId$FOLLOW_USER")
             .whereEqualTo("email", user.email)
@@ -72,6 +74,7 @@ class SearchUserAdapter(var context: Context, var searchList: ArrayList<UserMode
             }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun toggleFollowStatus(currentUserId: String, user: UserModel, holder: ViewHolder) {
         val isFollow = holder.searchBinding.btnFollow.tag as Boolean
 
@@ -96,7 +99,6 @@ class SearchUserAdapter(var context: Context, var searchList: ArrayList<UserMode
                     Log.e("SearchUserAdapter", "Error finding follow document: ", exception)
                 }
         } else {
-            // Follow user
             val followRef = Firebase.firestore.collection("$currentUserId$FOLLOW_USER").document()
             followRef.set(user)
                 .addOnSuccessListener {

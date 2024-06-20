@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="200dp"
     android:orientation="vertical"
-    android:padding="4dp"> <!-- Tambahkan padding untuk jarak antar item -->
+    android:padding="4dp">
 
     <ImageView
         android:id="@+id/postImage"
@@ -12,6 +12,6 @@
         android:layout_weight="1"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
-         /> <!-- Ganti dengan gambar placeholder Anda -->
+         />
 
 </LinearLayout>

@@ -5,9 +5,10 @@ class PostUserModel {
     var contentCaption: String = ""
     var uid: String = ""
     var time: String = ""
-
+    var likedBy: ArrayList<String> = ArrayList()
 
     constructor()
+
     constructor(contentUrl: String, contentCaption: String) {
         this.contentUrl = contentUrl
         this.contentCaption = contentCaption
@@ -19,6 +20,4 @@ class PostUserModel {
         this.uid = uid
         this.time = time
     }
-
-
 }

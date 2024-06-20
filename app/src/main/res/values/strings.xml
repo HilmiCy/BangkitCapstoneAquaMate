@@ -19,4 +19,25 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="profil_picture">Profil Picture</string>
+    <string name="apa_yang_sedang_terjadi">Apa yang sedang terjadi?</string>
+    <string name="tambahkan_gambar">Tambahkan Gambar</string>
+    <string name="post">Post</string>
+    <string name="batal">Batal</string>
+    <string name="tambah_postingan">Tambah Postingan</string>
+    <string name="tambah_reels">Tambah Reels</string>
+    <string name="pilih_gambar_profil">Pilih Gambar Profil</string>
+    <string name="simpan">Simpan</string>
+    <string name="bio">Bio</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="profil_image">Profil Image</string>
+    <string name="ikuti">Ikuti</string>
+    <string name="user_name">User Name</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="_2h">• 2h</string>
+    <string name="this_is_a_sample_tweet_text_it_can_be_multiple_lines_long_and_should_adjust_accordingly">This is a sample tweet text. It can be multiple lines long and should adjust accordingly.</string>
+    <string name="tweet_image">Tweet Image</string>
+    <string name="share">Share</string>
 </resources>

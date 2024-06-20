@@ -6,10 +6,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.aquamatesocialfish.databinding.ActivityLoginBinding
-import com.example.aquamatesocialfish.databinding.ActivityRegisterBinding
 import com.example.aquamatesocialfish.models.UserModel
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
@@ -31,13 +29,11 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Show progress bar while logging in
             binding.progressBar.visibility = View.VISIBLE
 
             val user = UserModel(email, password)
             Firebase.auth.signInWithEmailAndPassword(user.email!!, user.password!!)
                 .addOnCompleteListener(this) { task ->
-                    // Hide progress bar after login attempt completes
                     binding.progressBar.visibility = View.GONE
 
                     if (task.isSuccessful) {

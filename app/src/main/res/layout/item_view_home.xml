@@ -13,24 +13,22 @@
         android:layout_height="wrap_content"
         android:padding="8dp">
 
-        <!-- Profile Image -->
         <ImageView
             android:id="@+id/profile_image"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/user_avatar"
-            android:contentDescription="Profile Image"
+            android:contentDescription="@string/profile_image"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginEnd="8dp"/>
 
-        <!-- User Name -->
         <TextView
             android:id="@+id/user_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="User Name"
+            android:text="@string/user_name"
             android:textColor="@color/blue_tint"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/profile_image"
@@ -38,43 +36,41 @@
             app:layout_constraintEnd_toStartOf="@id/etPostTime"
             app:layout_constraintHorizontal_bias="0.0"/>
 
-        <!-- Post Time -->
         <TextView
             android:id="@+id/etPostTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="• 2h"
+            android:text="@string/_2h"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/profile_image"/>
 
-        <!-- Tweet Text -->
         <TextView
             android:id="@+id/etPostText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="This is a sample tweet text. It can be multiple lines long and should adjust accordingly."
+            android:text="@string/this_is_a_sample_tweet_text_it_can_be_multiple_lines_long_and_should_adjust_accordingly"
             android:textColor="@color/blue_tint"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/profile_image"/>
 
-        <!-- Tweet Image -->
         <ImageView
             android:id="@+id/iv_post"
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:src="@drawable/loading_placeholder"
-            android:contentDescription="Tweet Image"
+            android:contentDescription="@string/tweet_image"
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etPostText"/>
 
-        <!-- Divider Line -->
+
         <View
             android:id="@+id/divider"
+            android:layout_marginTop="12dp"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/darker_gray"
@@ -82,62 +78,50 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <!-- Buttons Row -->
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="60dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_post" />
+
         <LinearLayout
             android:id="@+id/button_row"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="3"
+            android:weightSum="1"
             app:layout_constraintTop_toBottomOf="@id/divider"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:gravity="center_horizontal">
 
-            <!-- Like Button -->
-            <ImageView
-                android:id="@+id/btnLike"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:src="@drawable/heart"
-                android:contentDescription="Like"
-                android:padding="8dp"
-                android:scaleType="centerInside"/>
-
-            <!-- Vertical Divider -->
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@android:color/darker_gray"/>
+                android:background="@android:color/darker_gray" />
 
-            <!-- Share Button -->
             <ImageView
                 android:id="@+id/btnShare"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:src="@drawable/share"
-                android:contentDescription="Share"
+                android:contentDescription="@string/share"
                 android:padding="8dp"
                 android:scaleType="centerInside"/>
 
-            <!-- Vertical Divider -->
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:background="@android:color/darker_gray"/>
 
-            <!-- Save Button -->
-            <ImageView
-                android:id="@+id/btn_save"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:src="@drawable/save"
-                android:contentDescription="Save"
-                android:padding="8dp"
-                android:scaleType="centerInside"/>
         </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.cardview.widget.CardView>

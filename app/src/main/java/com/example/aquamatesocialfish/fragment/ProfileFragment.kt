@@ -31,7 +31,6 @@ class ProfileFragment : Fragment() {
             navigateToEditProfile()
         }
 
-        // Show progress bar when starting data load
         binding.progressBar.visibility = View.VISIBLE
 
         loadUserProfile()
@@ -60,7 +59,7 @@ class ProfileFragment : Fragment() {
                     binding.usernameTxt.text = userAquamate.name
                     binding.fullnameTxt.text = userAquamate.fullname
                     binding.BioTxt.text = userAquamate.bio
-                    // Check if fullname or bio is null or empty
+
                     if (userAquamate.fullname.isNullOrEmpty() || userAquamate.bio.isNullOrEmpty()) {
                         navigateToEditProfile()
                     } else {
@@ -69,13 +68,12 @@ class ProfileFragment : Fragment() {
                         }
                     }
                 }
-                // Hide progress bar on data load success
                 binding.progressBar.visibility = View.GONE
             }
             .addOnFailureListener { exception ->
-                // Handle the error here
+
                 exception.printStackTrace()
-                // Hide progress bar on data load failure
+
                 binding.progressBar.visibility = View.GONE
             }
     }
@@ -84,7 +82,6 @@ class ProfileFragment : Fragment() {
         val editProfileFragment = EditProfileFragment()
         val transaction = parentFragmentManager.beginTransaction()
 
-        // Ensure setReorderingAllowed(true) is called before committing
         transaction.setReorderingAllowed(true)
         transaction.replace(R.id.fragment_container, editProfileFragment)
         transaction.addToBackStack(null)
